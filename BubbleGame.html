@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BubbleGame</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .imageClass{
+            background-image: url(img14.jpg);
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            width: 100%;
+            height: 100vh;
+        }
+        section {
+        position: relative;
+        overflow: hidden;
+    }
+
+    section span {
+        position: absolute;
+        top: -150px;
+        background: rgb(73, 73, 141);
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(12, 24, 192, 0.5);
+        animation: animate 4s linear infinite;
+        cursor: pointer;
+    }
+
+    /* section span:before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform: scale(0.20) translate(-70%, -70%);
+        background: radial-gradient(rgb(75, 73, 170), transparent);
+        border-radius: 40%;
+    } */
+
+    @keyframes animate {
+        100% {
+            transform: translateY(900%);
+            opacity: 2;
+        }
+        0% {
+            transform: translateY(0%);
+            opacity: 2;
+        } 
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+    #score_upper{
+        width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    }
+    #score{
+        font-size: 34px;
+    margin: 13px 20px 0 0;
+    color: #ff1212;
+    font-family: monospace;
+    word-spacing: -15px;
+    }
+    </style>
+</head>
+<body>
+    <section>
+        <div class="upperImage">
+            <div class="imageClass">
+                <div id="score_upper">
+                    <h1 id="score">Your Score : 0</h1>
+                </div>
+            </div>
+        </div>
+        <audio id="audioPlay" src="back.mp3"></audio>
+        <audio id="audioBubble" src="bubble.mp3"></audio>
+    </section>
+
+    <script>
+        
+        var array = ['red','yello','orange','gray','blue','purple','green','teal','deeppink'];
+        var number;
+        var i=0;
+        var coloName;
+        var x = window.matchMedia("(max-width: 768px)");
+        var y = window.matchMedia("(max-width: 576px)");
+       function CreateColor(){
+        number = Math.floor(Math.random()*(10-0)+0);
+        coloName = array[number];
+       }
+        
+       function BubbleEffect(){
+        document.getElementById('audioBubble').volume = 1;
+        document.getElementById('audioBubble').playbackRate = 10;
+        document.getElementById('audioBubble').play();
+       }
+        // console.log(coloName);
+       
+        setInterval(() => {
+            CreateColor();
+            document.getElementById('audioPlay').volume = 0.7;
+            document.getElementById('audioPlay').play();
+        }, 1000);
+
+        function createBubble() {
+    const section = document.querySelector('section');
+    const createElement = document.createElement('span');
+    
+
+    if(x.matches){
+        var size = Math.random() * 70;
+        createElement.style.width = 30 + size + 'px';
+        createElement.style.height = 30 + size + 'px';
+    }
+    else{
+        var size = Math.random() * 80;
+        createElement.style.width = 50 + size + 'px';
+        createElement.style.height = 50 + size + 'px';
+    }
+    createElement.style.left = Math.random() * innerWidth + 'px';
+    createElement.style.backgroundColor = coloName;
+    section.appendChild(createElement);
+
+    createElement.addEventListener('click', function handleClick(event) {
+        BubbleEffect();
+        createElement.style.display = "none";
+        i++;
+        document.getElementById('score').innerHTML = 'Your Score : '+i;
+    })
+
+    if(y.matches){
+        setTimeout(() => {
+        createElement.remove()
+    }, 8000)
+    }
+    else{
+        setTimeout(() => {
+        createElement.remove()
+    }, 10000)
+    }
+}
+
+if(y.matches){
+    setInterval(createBubble, 800);
+}
+else{
+    setInterval(createBubble, 800);
+}
+    </script>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</body>
+</html>
