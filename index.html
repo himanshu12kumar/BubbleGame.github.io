@@ -45,11 +45,20 @@
 
     @keyframes animate {
         100% {
-            transform: translateY(900%);
+            transform: translateY(2000%);
             opacity: 2;
         }
-        0% {
-            transform: translateY(0%);
+        70% {
+            transform: translateY(1400%);
+            opacity: 2;
+        }
+        60% {
+            transform: translateY(1100%);
+            opacity: 2;
+        }
+        
+    30% {
+            transform: translateY(500%);
             opacity: 2;
         } 
     }
@@ -70,16 +79,54 @@
     font-family: monospace;
     word-spacing: -15px;
     }
+    #gameOver{
+        width: 40%;
+    height: 40%;
+    background-color: #3a3abf;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    /* z-index: 999; */
+    z-index: 999;
+    position: absolute;
+    flex-direction: column;
+    line-height: 50px;
+    font-family: sans-serif;
+    top: 28%;
+    color: white;
+    left: 31%;
+    display: none;
+    }
+    #gameOver button{
+        padding: 6px 9px;
+    background-color: #3a3abf;
+    color: white;
+    }
+    .blurDivclass{
+        height: 100vh;
+    background-color: transparent;
+    backdrop-filter: blur(10px);
+    z-index: 999;
+    position: relative;
+    }
     </style>
 </head>
 <body>
     <section>
         <div class="upperImage">
             <div class="imageClass">
-                <div id="score_upper">
-                    <h1 id="score">Your Score : 0</h1>
+                <div id="blurDiv">
+                    <div id="score_upper">
+                        <h1 id="score">Your Score : 0</h1>
+                    </div>
+                    <div id="gameOver">
+                        <h1>Game is over</h1>
+                        <p id="youScre"></p>
+                        <button onclick="StartNewgame()">New Game</button>
+                    </div>
                 </div>
             </div>
+            
         </div>
         <audio id="audioPlay" src="back.mp3"></audio>
         <audio id="audioBubble" src="bubble.mp3"></audio>
@@ -91,6 +138,8 @@
         var number;
         var i=0;
         var coloName;
+        var myInterval;
+        var stop=0;
         var x = window.matchMedia("(max-width: 768px)");
         var y = window.matchMedia("(max-width: 576px)");
        function CreateColor(){
@@ -110,11 +159,29 @@
             document.getElementById('audioPlay').volume = 0.7;
             document.getElementById('audioPlay').play();
         }, 1000);
-
+  function StartNewgame(){
+    var blurClass = document.getElementById('blurDiv');
+     blurClass.classList.remove('blurDivclass');
+     document.getElementById('gameOver').style.display = "none";
+     stop=0;
+     window.location = "BubbleGame.html";
+  }
         function createBubble() {
+            stop++;
     const section = document.querySelector('section');
     const createElement = document.createElement('span');
     
+    if(stop == 40){
+      document.getElementById('gameOver').style.display = "flex";
+      document.getElementById('youScre').innerHTML = "Your Score is : "+i;
+     var blurClass = document.getElementById('blurDiv');
+     blurClass.classList.add('blurDivclass');
+     i=0;
+
+    }
+    else{
+        createElement.style.display = "block";
+    }
 
     if(x.matches){
         var size = Math.random() * 70;
@@ -137,26 +204,39 @@
         document.getElementById('score').innerHTML = 'Your Score : '+i;
     })
 
-//     if(y.matches){
-//         setTimeout(() => {
-//         createElement.remove()
-//     }, 8000)
-//     }
-//     else{
-//         setTimeout(() => {
-//         createElement.remove()
-//     }, 10000)
-//     }
+    // if(y.matches){
+    //     setTimeout(() => {
+    //     createElement.remove()
+    // }, 30000)
+    // }
+    // else{
+    //     setTimeout(() => {
+    //     createElement.remove()
+    // }, 30000)
+    // }
+    
+    // console.log(stop);
 }
 
+
+// function myStopFunction() {
+//   clearInterval(myInterval);
+// }
+
 if(y.matches){
-    setInterval(createBubble, 500);
+  setInterval(() => {
+        createBubble();
+    }, 2000);
 }
 else{
-    setInterval(createBubble, 800);
+   setInterval(() => {
+        createBubble();
+    }, 3000);
+   
 }
     </script>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </body>
 </html>
+
